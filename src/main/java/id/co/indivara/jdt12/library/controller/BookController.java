@@ -1,6 +1,7 @@
 package id.co.indivara.jdt12.library.controller;
 
 import id.co.indivara.jdt12.library.entities.Book;
+import id.co.indivara.jdt12.library.model.DisplayBookResponse;
 import id.co.indivara.jdt12.library.services.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +16,21 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/{id}")
-    public Book getBookById(@PathVariable Integer bookId){
-        return bookService.getBookById(bookId);
+    public Book getBookById(@PathVariable ("id") Integer id){
+        return bookService.getBookById(id);
     }
     @GetMapping("/all")
     public List<Book> getAllBooks(){
         return bookService.getAllBooks();
     }
     @DeleteMapping("/{id}")
-    public String deleteBook(@PathVariable Integer bookId){
+    public String deleteBook(@PathVariable ("id")Integer bookId){
        return bookService.deleteBook(bookId);
     }
+
+    @GetMapping("/display/{id}")
+    public DisplayBookResponse displayBookResponse(@PathVariable("id") Integer id ){
+        return bookService.displayBook(id);
+    }
+
 }

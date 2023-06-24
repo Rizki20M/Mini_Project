@@ -109,7 +109,6 @@ public class TransactionServiceImpl implements TransactionService {
 
         transactionRepository.save(transaction);
         bookRepository.save(transaction.getBook());
-        System.out.println("here");
 
         return "Buku Berhasil dikembalikan" + (transaction.getPenalty() ? "tetapi ada penalty karena kamu telat mengembalikan" : "");
     }

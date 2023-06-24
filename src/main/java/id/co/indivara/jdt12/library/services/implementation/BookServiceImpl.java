@@ -2,7 +2,10 @@ package id.co.indivara.jdt12.library.services.implementation;
 
 import id.co.indivara.jdt12.library.entities.Book;
 import id.co.indivara.jdt12.library.model.BookRequest;
+import id.co.indivara.jdt12.library.model.DisplayBookResponse;
 import id.co.indivara.jdt12.library.repositories.BookRepository;
+import id.co.indivara.jdt12.library.repositories.TransactionRepository;
+import id.co.indivara.jdt12.library.repositories.WishlistRepository;
 import id.co.indivara.jdt12.library.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,10 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
+    @Autowired
+    private WishlistRepository wishlistRepository;
     @Override
     public Book saveBook(BookRequest bookRequest) {
         Book buku = Book.builder()
@@ -32,7 +39,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book getBookById(Integer bookId) {
-        return null;
+        return bookRepository.findById(bookId)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Buku Yang Anda Cari Tidak Ditemukan"));
     }
 
     @Override
@@ -47,5 +55,18 @@ public class BookServiceImpl implements BookService {
         
         bookRepository.delete(book);
     return "Buku Berhasil Dihapus";
+    }
+
+    @Override
+    public DisplayBookResponse displayBook(Integer bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Buku Yang Anda Cari Tidak Ditemukan"));
+
+        return DisplayBookResponse.builder()
+                .book(book)
+                .readingTimes(transactionRepository.findAllByBook(book).size())
+                .wishlist(wishlistRepository.findAllByBook(book).size())
+                .build();
+
     }
 }
