@@ -1,5 +1,4 @@
 package id.co.indivara.jdt12.library.services.implementation;
-
 import id.co.indivara.jdt12.library.entities.Book;
 import id.co.indivara.jdt12.library.model.BookRequest;
 import id.co.indivara.jdt12.library.model.DisplayBookResponse;
@@ -22,6 +21,7 @@ public class BookServiceImpl implements BookService {
     private TransactionRepository transactionRepository;
     @Autowired
     private WishlistRepository wishlistRepository;
+
     @Override
     public Book saveBook(BookRequest bookRequest) {
         Book buku = Book.builder()
@@ -40,7 +40,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book getBookById(Integer bookId) {
         return bookRepository.findById(bookId)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Buku Yang Anda Cari Tidak Ditemukan"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buku Yang Anda Cari Tidak Ditemukan"));
     }
 
     @Override
@@ -51,16 +51,17 @@ public class BookServiceImpl implements BookService {
     @Override
     public String deleteBook(Integer bookId) {
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Buku Yang Anda Cari Tidak Ditemukan"));
-        
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buku Yang Anda Cari Tidak Ditemukan"));
+
         bookRepository.delete(book);
-    return "Buku Berhasil Dihapus";
+        return "Buku Berhasil Dihapus";
     }
+
 
     @Override
     public DisplayBookResponse displayBook(Integer bookId) {
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Buku Yang Anda Cari Tidak Ditemukan"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buku Yang Anda Cari Tidak Ditemukan"));
 
         return DisplayBookResponse.builder()
                 .book(book)
@@ -69,4 +70,21 @@ public class BookServiceImpl implements BookService {
                 .build();
 
     }
+
+    @Override
+    public String updateBook(BookRequest bookRequest, Integer bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buku Yang Anda Cari Tidak Ditemukan"));
+
+        book.setBookIsbn(bookRequest.getBookIsbn());
+        book.setBookTitle(bookRequest.getBookTitle());
+        book.setBookAuthor(bookRequest.getBookAuthor());
+        book.setBookPublisher(bookRequest.getBookPublisher());
+        book.setBookPages(bookRequest.getBookPages());
+        book.setBookTotals(bookRequest.getBookTotals());
+        bookRepository.save(book);
+
+        return "Buku Berhasil Di Update";
+    }
 }
+

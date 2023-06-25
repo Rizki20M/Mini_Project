@@ -12,7 +12,9 @@ import javax.persistence.Column;
 @AllArgsConstructor
 public class ReaderRequest {
     private String readerName;
+    private Integer readerAge;
     private String readerAddress;
+    private String readerGender;
     private String readerPhone;
 
 }

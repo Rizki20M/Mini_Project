@@ -1,5 +1,4 @@
 package id.co.indivara.jdt12.library.services.implementation;
-
 import id.co.indivara.jdt12.library.entities.Book;
 import id.co.indivara.jdt12.library.entities.Reader;
 import id.co.indivara.jdt12.library.entities.Transaction;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -39,15 +37,14 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public Object borrowBook(BorrowRequest req) {
-        System.out.println(1);
         Book book = bookRepository.findById(req.getBookId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buku yang mau dipinjem gak ada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buku Yang Ingin Dipinjam Tidak Ada"));
         Reader reader = readerRepository.findById(req.getReaderId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Reader Tidak Ketemu, Anda Harus Registrasi Lebih Dahulu"));
 
         System.out.println("total dari buku sebelum di pinjam " + book.getBookTotals());
         System.out.println("id dari buku yang dipinjam " + book.getBookId());
-        System.out.println("request id reader yang minjam " + req.getReaderId());
+        System.out.println("request id reader yang meminjam " + req.getReaderId());
         System.out.println("request id buku yang dipinjam " + req.getBookId());
         if(book.getBookTotals() == 0){
             Wishlist wishlist = wishlistRepository.findByReaderAndBook(reader, book).orElse(null);
@@ -58,10 +55,10 @@ public class TransactionServiceImpl implements TransactionService {
                         .build();
 
                 wishlistRepository.save(wishlist1);
-                return "Bukunya lagi kosong, udah ditambahin di wishlist";
+                return "Buku Sedang Kosong, Anda Akan Ditambahkan Ke Daftar Wishlist";
 
             }
-            return "Bukunya Masih kosong, wishlist kamu juga ada";
+            return "Buku Masih Kosong, Anda Sudah Ada Dalam Daftar Wishlist";
         }
 
         book.setBookTotals(book.getBookTotals() - 1);
@@ -110,7 +107,7 @@ public class TransactionServiceImpl implements TransactionService {
         transactionRepository.save(transaction);
         bookRepository.save(transaction.getBook());
 
-        return "Buku Berhasil dikembalikan" + (transaction.getPenalty() ? "tetapi ada penalty karena kamu telat mengembalikan" : "");
+        return "Buku Berhasil dikembalikan" + (transaction.getPenalty() ? "Tetapi Anda Terkena Pinalty Karena Melewati Batas Waktu Pengembalian" : "");
     }
 
 }

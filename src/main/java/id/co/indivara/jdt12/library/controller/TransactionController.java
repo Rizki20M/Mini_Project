@@ -1,5 +1,4 @@
 package id.co.indivara.jdt12.library.controller;
-
 import id.co.indivara.jdt12.library.entities.Transaction;
 import id.co.indivara.jdt12.library.model.BorrowRequest;
 import id.co.indivara.jdt12.library.model.ReturnRequest;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
-
     @Autowired
     private TransactionService transactionService;
 

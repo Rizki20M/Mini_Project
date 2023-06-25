@@ -23,11 +23,6 @@ public class BookController {
     public List<Book> getAllBooks(){
         return bookService.getAllBooks();
     }
-    @DeleteMapping("/{id}")
-    public String deleteBook(@PathVariable ("id")Integer bookId){
-       return bookService.deleteBook(bookId);
-    }
-
     @GetMapping("/display/{id}")
     public DisplayBookResponse displayBookResponse(@PathVariable("id") Integer id ){
         return bookService.displayBook(id);

@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
     List<Transaction> findAllByBook(Book book);
-    Optional<Transaction> findByIdAndReader(Integer transactionId, Reader reader);
+//    Optional<Transaction> findByIdAndReader(Integer transactionId, Reader reader);
 }

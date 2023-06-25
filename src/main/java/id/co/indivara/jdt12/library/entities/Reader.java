@@ -3,7 +3,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
@@ -21,8 +20,14 @@ public class Reader {
     @Column(name="reader_name")
     private String readerName;
 
+    @Column(name="reader_age")
+    private Integer readerAge;
+
     @Column(name="reader_address")
     private String readerAddress;
+
+    @Column(name="reader_gender")
+    private String readerGender;
 
     @Column(name="reader_phone")
     private String readerPhone;
