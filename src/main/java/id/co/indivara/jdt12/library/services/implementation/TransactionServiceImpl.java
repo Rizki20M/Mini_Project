@@ -78,9 +78,9 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public String returnBook(Integer transactionId, Integer readerId) {
         Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Transaksi Tidak Ditemukan ketemu"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Transaksi Tidak Ditemukan"));
         Reader reader = readerRepository.findById(readerId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Tidak Ditemukan Ketemu"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Tidak Ditemukan"));
         if(transaction.getReturnDate() != null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buku ini sudah pernah dikembalikan");
         }

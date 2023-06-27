@@ -33,7 +33,7 @@ public class AdminController {
         return readerService.saveReader(readerRequest);
     }
     @DeleteMapping("/reader/{id}")
-    public Message deleteReader(@PathVariable ("id")Integer readerId){
+    public Message deleteReader(@PathVariable ("id")Integer readerId)   {
         return readerService.deleteReader(readerId);
     }
 
