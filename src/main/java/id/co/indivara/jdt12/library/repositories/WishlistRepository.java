@@ -4,8 +4,6 @@ import id.co.indivara.jdt12.library.entities.Book;
 import id.co.indivara.jdt12.library.entities.Reader;
 import id.co.indivara.jdt12.library.entities.Wishlist;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
-
 import java.util.List;
 import java.util.Optional;
 

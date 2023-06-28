@@ -1,5 +1,4 @@
 package id.co.indivara.jdt12.library.swagger;
-
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;

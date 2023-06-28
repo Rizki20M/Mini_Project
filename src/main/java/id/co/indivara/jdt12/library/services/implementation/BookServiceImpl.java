@@ -1,5 +1,6 @@
 package id.co.indivara.jdt12.library.services.implementation;
 import id.co.indivara.jdt12.library.entities.Book;
+import id.co.indivara.jdt12.library.handling.Message;
 import id.co.indivara.jdt12.library.model.BookRequest;
 import id.co.indivara.jdt12.library.model.DisplayBookResponse;
 import id.co.indivara.jdt12.library.repositories.BookRepository;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 
 @Service
@@ -49,12 +49,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public String deleteBook(Integer bookId) {
+    public Message deleteBook(Integer bookId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buku Yang Anda Cari Tidak Ditemukan"));
-
-        bookRepository.delete(book);
-        return "Buku Berhasil Dihapus";
+        bookRepository.deleteById(bookId);
+        return new Message(200,"Buku Berhasil Dihapus");
     }
 
 
@@ -70,9 +69,8 @@ public class BookServiceImpl implements BookService {
                 .build();
 
     }
-
     @Override
-    public String updateBook(BookRequest bookRequest, Integer bookId) {
+    public Book updateBook(BookRequest bookRequest, Integer bookId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buku Yang Anda Cari Tidak Ditemukan"));
 
@@ -84,7 +82,7 @@ public class BookServiceImpl implements BookService {
         book.setBookTotals(bookRequest.getBookTotals());
         bookRepository.save(book);
 
-        return "Buku Berhasil Di Update";
+        return book;
     }
 }
 

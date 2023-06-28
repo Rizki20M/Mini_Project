@@ -1,6 +1,7 @@
 package id.co.indivara.jdt12.library.services.implementation;
 import id.co.indivara.jdt12.library.entities.Book;
 import id.co.indivara.jdt12.library.entities.Reader;
+import id.co.indivara.jdt12.library.handling.Message;
 import id.co.indivara.jdt12.library.model.ReaderRequest;
 import id.co.indivara.jdt12.library.repositories.ReaderRepository;
 import id.co.indivara.jdt12.library.services.ReaderService;
@@ -37,14 +38,13 @@ public class ReaderServiceImpl implements ReaderService {
     }
 
     @Override
-    public String deleteReader(Integer readerId) {
+    public Message deleteReader(Integer readerId) {
         Reader reader = readerRepository.findById(readerId)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Reader Yang Anda Cari Tidak Ditemukan"));
 
         readerRepository.delete(reader);
-        return "Reader Berhasil Dihapus";
-    }
-    public String updateReader(ReaderRequest readerRequest, Integer readerId){
+        return new Message(200,"Reader Berhasil Dihapus");    }
+    public Reader updateReader(ReaderRequest readerRequest, Integer readerId){
         Reader reader = readerRepository.findById(readerId)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Reader Yang Anda Cari Tidak Ditemukan"));
         reader.setReaderName(readerRequest.getReaderName());
@@ -54,7 +54,7 @@ public class ReaderServiceImpl implements ReaderService {
         reader.setReaderPhone(readerRequest.getReaderPhone());
         readerRepository.save(reader);
 
-        return "Data Berhasil Di Update";
+        return reader;
     }
 
 }

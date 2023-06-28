@@ -10,7 +10,6 @@ import id.co.indivara.jdt12.library.repositories.ReaderRepository;
 import id.co.indivara.jdt12.library.repositories.TransactionRepository;
 import id.co.indivara.jdt12.library.repositories.WishlistRepository;
 import id.co.indivara.jdt12.library.services.TransactionService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Optional;
+
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -40,12 +39,8 @@ public class TransactionServiceImpl implements TransactionService {
         Book book = bookRepository.findById(req.getBookId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buku Yang Ingin Dipinjam Tidak Ada"));
         Reader reader = readerRepository.findById(req.getReaderId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Reader Tidak Ketemu, Anda Harus Registrasi Lebih Dahulu"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Reader Tidak Ditemykan, Anda Harus Registrasi Terlebih Dahulu"));
 
-        System.out.println("total dari buku sebelum di pinjam " + book.getBookTotals());
-        System.out.println("id dari buku yang dipinjam " + book.getBookId());
-        System.out.println("request id reader yang meminjam " + req.getReaderId());
-        System.out.println("request id buku yang dipinjam " + req.getBookId());
         if(book.getBookTotals() == 0){
             Wishlist wishlist = wishlistRepository.findByReaderAndBook(reader, book).orElse(null);
             if(wishlist == null){
@@ -62,13 +57,10 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         book.setBookTotals(book.getBookTotals() - 1);
-        long dueData = Math.round((double) (book.getBookPages() / 100));
-
         Transaction trx = Transaction.builder()
                 .book(book)
                 .borrowDate(LocalDate.now())
                 .penalty(false)
-//                .dueDate(LocalDate.now().minusDays(2))
                 .dueDate(LocalDate.now().plusDays((long)Math.ceil(book.getBookPages()/100)))
                 .reader(reader)
                 .build();
@@ -86,9 +78,9 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public String returnBook(Integer transactionId, Integer readerId) {
         Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Transaksi Buku gak ketemu"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Transaksi Tidak Ditemukan ketemu"));
         Reader reader = readerRepository.findById(readerId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Gak Ketemu"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Tidak Ditemukan Ketemu"));
         if(transaction.getReturnDate() != null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Buku ini sudah pernah dikembalikan");
         }
@@ -107,7 +99,7 @@ public class TransactionServiceImpl implements TransactionService {
         transactionRepository.save(transaction);
         bookRepository.save(transaction.getBook());
 
-        return "Buku Berhasil dikembalikan" + (transaction.getPenalty() ? "Tetapi Anda Terkena Pinalty Karena Melewati Batas Waktu Pengembalian" : "");
+        return "Buku Berhasil Dikembalikan," + (transaction.getPenalty() ? " Tetapi Anda Terkena Penalty Karena Melewati Batas Waktu Pengembalian" : "");
     }
 
 }

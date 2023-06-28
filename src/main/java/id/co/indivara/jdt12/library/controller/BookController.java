@@ -1,5 +1,4 @@
 package id.co.indivara.jdt12.library.controller;
-
 import id.co.indivara.jdt12.library.entities.Book;
 import id.co.indivara.jdt12.library.model.DisplayBookResponse;
 import id.co.indivara.jdt12.library.services.BookService;
@@ -27,5 +26,4 @@ public class BookController {
     public DisplayBookResponse displayBookResponse(@PathVariable("id") Integer id ){
         return bookService.displayBook(id);
     }
-
 }

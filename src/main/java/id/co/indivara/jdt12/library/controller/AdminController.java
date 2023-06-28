@@ -1,6 +1,7 @@
 package id.co.indivara.jdt12.library.controller;
 import id.co.indivara.jdt12.library.entities.Book;
 import id.co.indivara.jdt12.library.entities.Reader;
+import id.co.indivara.jdt12.library.handling.Message;
 import id.co.indivara.jdt12.library.model.BookRequest;
 import id.co.indivara.jdt12.library.model.ReaderRequest;
 import id.co.indivara.jdt12.library.services.BookService;
@@ -20,11 +21,11 @@ public class AdminController {
         return bookService.saveBook(bookRequest);
     }
     @DeleteMapping("/book/{id}")
-    public String deleteBook(@PathVariable ("id")Integer bookId){
+    public Message deleteBook(@PathVariable ("id")Integer bookId){
         return bookService.deleteBook(bookId);
     }
-    @PostMapping("/updateBook/{id}")
-    public String updateBook(@RequestBody BookRequest bookRequest, @PathVariable("id") Integer bookId){
+    @PutMapping("/updateBook/{id}")
+    public Book updateBook(@RequestBody BookRequest bookRequest, @PathVariable("id") Integer bookId){
         return bookService.updateBook(bookRequest, bookId);
     }
     @PostMapping("/reader")
@@ -32,12 +33,12 @@ public class AdminController {
         return readerService.saveReader(readerRequest);
     }
     @DeleteMapping("/reader/{id}")
-    public String deleteReader(@PathVariable ("id")Integer readerId){
+    public Message deleteReader(@PathVariable ("id")Integer readerId){
         return readerService.deleteReader(readerId);
     }
 
-    @PostMapping("/updateReader/{id}")
-    public String updateReader(@RequestBody ReaderRequest readerRequest, @PathVariable("id") Integer readerId){
+    @PutMapping("/updateReader/{id}")
+    public Reader updateReader(@RequestBody ReaderRequest readerRequest, @PathVariable("id") Integer readerId){
         return readerService.updateReader(readerRequest,readerId);
     }
 }
